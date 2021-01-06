@@ -94,7 +94,7 @@ public class Producer implements Subject {
     @Override
     public void notifyObserver() {
         for(Observer observer : observers){
-            observer.update();
+            observer.update(monthlyStats.size());
         }
     }
 }
