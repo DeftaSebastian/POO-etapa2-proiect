@@ -1,6 +1,8 @@
 package distributors;
 
 import consumers.Consumer;
+import observerPattern.Observer;
+import production.Producer;
 import strategies.EnergyChoiceStrategyType;
 import strategies.GreenStrategy;
 import strategies.PriceStrategy;
@@ -9,7 +11,7 @@ import strategies.Strategy;
 
 import java.util.ArrayList;
 
-public final class Distributor {
+public final class Distributor implements Observer {
     private long id;
     private long contractLength;
     private long initialBudget;
@@ -21,6 +23,7 @@ public final class Distributor {
     private ArrayList<Consumer> contracts = new ArrayList<>();
     private ArrayList<Long> energyFrom = new ArrayList<>();
     private Strategy strategy;
+    private ArrayList<Producer> producers = new ArrayList<>();
 
     public ArrayList<Long> getEnergyFrom() {
         return energyFrom;
@@ -148,5 +151,10 @@ public final class Distributor {
             strategy = new PriceStrategy();
         if(energyChoiceStrategyType.equals("QUANTITY"))
             strategy = new QuantityStrategy();
+    }
+
+    @Override
+    public void update(int month) {
+        strategy.Strategy(producers, this, month);
     }
 }
