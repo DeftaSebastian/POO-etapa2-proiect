@@ -21,20 +21,24 @@ public final class Distributor implements Observer {
     private EnergyChoiceStrategyType energyChoiceStrategyType;
     private boolean isBankrupt = false;
     private ArrayList<Consumer> contracts = new ArrayList<>();
-    private ArrayList<Long> energyFrom = new ArrayList<>();
+    private ArrayList<Producer> energyFrom = new ArrayList<>();
     private Strategy strategy;
     private ArrayList<Producer> producers = new ArrayList<>();
 
-    public ArrayList<Long> getEnergyFrom() {
+    public ArrayList<Producer> getEnergyFrom() {
         return energyFrom;
     }
 
-    public void setEnergyFrom(ArrayList<Long> energyFrom) {
+    public void setEnergyFrom(ArrayList<Producer> energyFrom) {
         this.energyFrom = energyFrom;
     }
 
-    public void addEnergyFrom(Long id){
-        this.energyFrom.add(id);
+    public ArrayList<Producer> getProducers() {
+        return producers;
+    }
+
+    public void setProducers(ArrayList<Producer> producers) {
+        this.producers = producers;
     }
 
     public long getInitialBudget() {

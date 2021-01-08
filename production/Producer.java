@@ -1,16 +1,18 @@
 package production;
 
+import distributors.Distributor;
 import entities.EnergyType;
 import observerPattern.Observer;
 import observerPattern.Subject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Producer implements Subject {
     private long id;
     private EnergyType energyType;
     private long maxDistributors;
-    private long priceKW;
+    private double priceKW;
     private long energyPerDistributor;
     private long numberOfDistributors = 0;
     private ArrayList<History> monthlyStats = new ArrayList<>();
@@ -56,8 +58,12 @@ public class Producer implements Subject {
         this.maxDistributors = maxDistributors;
     }
 
-    public long getPriceKW() {
+    public double getPriceKW() {
         return priceKW;
+    }
+
+    public void setPriceKW(double priceKW) {
+        this.priceKW = priceKW;
     }
 
     public void setPriceKW(long priceKW) {
@@ -72,13 +78,21 @@ public class Producer implements Subject {
         this.energyPerDistributor = energyPerDistributor;
     }
 
-    public Producer(long id, EnergyType energyType, long maxDistributors, long priceKW,
+    public Producer(long id, EnergyType energyType, long maxDistributors, Double priceKW,
                     long energyPerDistributor) {
         this.id = id;
         this.energyType = energyType;
         this.maxDistributors = maxDistributors;
         this.priceKW = priceKW;
         this.energyPerDistributor = energyPerDistributor;
+    }
+
+    public void addAllObservers(List<Distributor> distributorList){
+        for(Distributor distributor : distributorList){
+            if(!distributor.isBankrupt()){
+                observers.add(distributor);
+            }
+        }
     }
 
     @Override

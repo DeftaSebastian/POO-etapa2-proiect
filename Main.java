@@ -1,12 +1,15 @@
 import actions.Actions;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import comparingtools.SortByID;
 import distributors.Distributor;
 import consumers.Consumer;
 import entities.EnergyType;
 import factory.Factory;
+import formulas.Formulas;
 import months.DistributorChanges;
 import months.MonthlyUpdates;
 import months.ProducerChanges;
+import net.sf.saxon.trans.SymbolicName;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -14,6 +17,7 @@ import org.json.simple.parser.ParseException;
 import outclass.OutClass;
 import production.Producer;
 import strategies.EnergyChoiceStrategyType;
+import utils.Utils;
 
 import java.io.File;
 import java.io.FileReader;
@@ -85,14 +89,15 @@ public final class Main {
                         (Long) ((JSONObject) object).get("initialBudget"),
                         (Long) ((JSONObject) object).get("initialInfrastructureCost"),
                         (Long) ((JSONObject) object).get("energyNeededKW"),
-                        (EnergyChoiceStrategyType) ((JSONObject) object).get("producerStrategy")));
+                        Utils.stringToEnergyStrategy(
+                                (String) ((JSONObject) object).get("producerStrategy"))));
             }
 
             for (Object object : jsonProducers) {
                 producers.add(new Producer((Long) ((JSONObject) object).get("id"),
-                        (EnergyType) ((JSONObject) object).get("energyType"),
+                        Utils.stringToEnergyType((String) ((JSONObject) object).get("energyType")),
                         (Long) ((JSONObject) object).get("maxDistributors"),
-                        (Long) ((JSONObject) object).get("priceKW"),
+                        (Double) ((JSONObject) object).get("priceKW"),
                         (Long) ((JSONObject) object).get("energyPerDistributor")));
             }
         } catch (ParseException | IOException e) {
@@ -108,6 +113,11 @@ public final class Main {
         Distributor bestDistributor;
 
         //Prima runda cu datele initiale
+        producers.sort(new SortByID()); //sortam crescator dupa id
+        for (Producer producer : producers) {
+            producer.addAllObservers(distributors); //adaugam toti distribuitorii ca observatori
+        }                                           //daca nu sunt bankrupt
+        actions.setProductionCostsDistributor(distributors); //setam costul de productie
         bestDistributor = actions.getBestDistributor(distributors);
         actions.getContractPrices(distributors, mapContractPrices);
         actions.makeContracts(consumers, bestDistributor, mapContractPrices, mapClientBills);

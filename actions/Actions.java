@@ -352,14 +352,22 @@ public final class Actions {
 
     public void addDistributorsToProducers(List<Producer> producerList, Distributor distributor, int month,
                                            long totalEnergy) {
+        distributor.getEnergyFrom().clear();
         for(Producer producer : producerList){
             if(producer.getNumberOfDistributors() < producer.getMaxDistributors()
                     && totalEnergy < distributor.getEnergyNeeded()){
                 totalEnergy += producer.getEnergyPerDistributor();
                 producer.setNumberOfDistributors(producer.getNumberOfDistributors() + 1);
-                distributor.addEnergyFrom(producer.getId());
+                distributor.getEnergyFrom().add(producer);
                 producer.getMonthlyStats().get(month).getDistributors().add(distributor);
             }
+        }
+    }
+
+    public void setProductionCostsDistributor(List<Distributor> distributorList){
+        Formulas formulas = new Formulas();
+        for(Distributor distributor : distributorList){
+            formulas.setProductionCost(distributor);
         }
     }
 }
