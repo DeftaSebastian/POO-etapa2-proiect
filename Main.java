@@ -114,9 +114,9 @@ public final class Main {
 
         //Prima runda cu datele initiale
         producers.sort(new SortByID()); //sortam crescator dupa id
-        for (Producer producer : producers) {
-            producer.addAllObservers(distributors); //adaugam toti distribuitorii ca observatori
-        }                                           //daca nu sunt bankrupt
+        actions.addNewHistory(producers);
+        actions.setStrategies(distributors);
+        actions.giveDistributorsNewProducers(producers, distributors);
         actions.setProductionCostsDistributor(distributors); //setam costul de productie
         bestDistributor = actions.getBestDistributor(distributors);
         actions.getContractPrices(distributors, mapContractPrices);
@@ -140,9 +140,9 @@ public final class Main {
             if (atLeastOneDistributorInTheGame == 0) {
                 break;
             }
+            actions.addNewHistory(producers);
             actions.monthlyDistributorChanges(monthlyUpdates.getDistributorChanges(),
                     distributors);
-            actions.monthlyProducerChanges(monthlyUpdates.getProducerChanges(), producers);
             actions.monthlyNewConsumers(consumers,
                     monthlyUpdates.getNewConsumers());
             bestDistributor = actions.getBestDistributor(distributors);
@@ -156,6 +156,8 @@ public final class Main {
             actions.giveMoneyToDistributors(moneyForDistributors, distributors);
             actions.checkBankruptDistributors(consumers, distributors);
             actions.decrementContractMonths(consumers);
+            actions.monthlyProducerChanges(monthlyUpdates.getProducerChanges(), producers);
+            actions.findNewProducers(producers, distributors);
         }
         actions.endContractOnlyIfBankrupt(distributors, consumers);
 
@@ -163,7 +165,9 @@ public final class Main {
         ObjectMapper objectMapper = new ObjectMapper();
         File outFile = new File(args[1]);
         Factory factory = Factory.getFactory();
-        OutClass out = factory.createOutClass(consumers, distributors, mapClientBills);
+        OutClass out =
+                factory.createOutClass(consumers, distributors, producers, mapClientBills,
+                        mapContractPrices);
         objectMapper.writerWithDefaultPrettyPrinter().writeValue(outFile, out);
     }
 }

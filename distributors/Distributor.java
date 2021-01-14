@@ -2,6 +2,7 @@ package distributors;
 
 import consumers.Consumer;
 import observerPattern.Observer;
+import observerPattern.Subject;
 import production.Producer;
 import strategies.EnergyChoiceStrategyType;
 import strategies.GreenStrategy;
@@ -10,6 +11,7 @@ import strategies.QuantityStrategy;
 import strategies.Strategy;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public final class Distributor implements Observer {
     private long id;
@@ -23,7 +25,22 @@ public final class Distributor implements Observer {
     private ArrayList<Consumer> contracts = new ArrayList<>();
     private ArrayList<Producer> energyFrom = new ArrayList<>();
     private Strategy strategy;
-    private ArrayList<Producer> producers = new ArrayList<>();
+    private List<Producer> producers = new ArrayList<>();
+    private List<Subject> subjects = new ArrayList<>();
+
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
+    }
+
+    public void addSubject(Subject newSubject) {
+        subjects.add(newSubject);
+    }
+
+    private boolean hasToMove;
 
     public ArrayList<Producer> getEnergyFrom() {
         return energyFrom;
@@ -33,8 +50,12 @@ public final class Distributor implements Observer {
         this.energyFrom = energyFrom;
     }
 
-    public ArrayList<Producer> getProducers() {
+    public List<Producer> getProducers() {
         return producers;
+    }
+
+    public void addProducer(Producer producer) {
+        producers.add(producer);
     }
 
     public void setProducers(ArrayList<Producer> producers) {
@@ -148,17 +169,36 @@ public final class Distributor implements Observer {
         this.contracts = contracts;
     }
 
-    public void setStrategy(){
-        if(energyChoiceStrategyType.equals("GREEN"))
+    public void setStrategy() {
+        if (energyChoiceStrategyType.label.equals("GREEN")) {
             strategy = new GreenStrategy();
-        if(energyChoiceStrategyType.equals("PRICE"))
+        }
+        if (energyChoiceStrategyType.label.equals("PRICE")) {
             strategy = new PriceStrategy();
-        if(energyChoiceStrategyType.equals("QUANTITY"))
+        }
+        if (energyChoiceStrategyType.label.equals("QUANTITY")) {
             strategy = new QuantityStrategy();
+        }
+    }
+
+    public boolean hasToMove() {
+        return hasToMove;
+    }
+
+    public void setHasToMove(boolean hasToMove) {
+        this.hasToMove = hasToMove;
+    }
+
+    public Strategy getStrategy() {
+        return strategy;
+    }
+
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
     }
 
     @Override
-    public void update(int month) {
-        strategy.Strategy(producers, this, month);
+    public void update(List<Producer> producerList, int month) {
+        this.setHasToMove(true);
     }
 }

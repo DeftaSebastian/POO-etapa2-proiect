@@ -1,12 +1,18 @@
 package factory;
 
+import comparingtools.SortByID;
 import consumers.Consumer;
 import distributors.Distributor;
 import outclass.ConsumerForDistributor;
 import outclass.ConsumerOut;
 import outclass.DistribuitorOut;
+import outclass.HistoryOut;
 import outclass.OutClass;
+import outclass.ProducerOut;
+import production.History;
+import production.Producer;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,6 +24,7 @@ public final class Factory {
 
     /**
      * functie care creeaza singleton-ul factory daca acesta nu a fost creat
+     *
      * @return intoarce singleton-ul factory
      */
     public static Factory getFactory() {
@@ -31,14 +38,17 @@ public final class Factory {
      * functie care creeaza clasa de tip OutClass pentru a fi folosita la output, ea itereaza prin
      * lista de consumatori si distribuitori creeand clasele ConsumerOut, DistribuitorOut si
      * ConsumerForDistribuitor, acestea fiind folosite pentru a fi adaugate in listele din OutClass
-     * @param consumerList lista de consumatori
+     *
+     * @param consumerList    lista de consumatori
      * @param distributorList lista de distribuitori
-     * @param mapClientBills hashMap-ul cu ratele pe care clientii trebuie sa le plateasca
+     * @param mapClientBills  hashMap-ul cu ratele pe care clientii trebuie sa le plateasca
      * @return intoarce noua clasa de tip OutClass creata si populata
      */
     public OutClass createOutClass(final List<Consumer> consumerList,
                                    final List<Distributor> distributorList,
-                                   final HashMap<Long, Long> mapClientBills) {
+                                   final List<Producer> producerList,
+                                   final HashMap<Long, Long> mapClientBills,
+                                   final HashMap<Long, Long> contractPrices) {
         OutClass out = new OutClass();
         for (Consumer consumer : consumerList) {
             ConsumerOut consumerOut =
@@ -47,7 +57,10 @@ public final class Factory {
         }
         for (Distributor distributor : distributorList) {
             DistribuitorOut distribuitorOut =
-                    new DistribuitorOut(distributor.getId(), distributor.getBudget(),
+                    new DistribuitorOut(distributor.getId(), distributor.getEnergyNeeded(),
+                            contractPrices.get(distributor.getId()),
+                            distributor.getBudget(),
+                            distributor.getEnergyChoiceStrategyType().toString(),
                             distributor.isBankrupt());
             for (Consumer consumer : distributor.getContracts()) {
                 ConsumerForDistributor consumerForDistributor = new ConsumerForDistributor();
@@ -58,6 +71,25 @@ public final class Factory {
                 distribuitorOut.getContracts().add(consumerForDistributor);
             }
             out.getDistributors().add(distribuitorOut);
+        }
+        Collections.sort(producerList, new SortByID());
+        for (Producer producer : producerList) {
+            ProducerOut producerOut =
+                    new ProducerOut(producer.getId(), producer.getMaxDistributors(),
+                            producer.getPriceKW(),
+                            producer.getEnergyType().toString(),
+                            producer.getEnergyPerDistributor());
+            for(History history : producer.getMonthlyStats()){
+                if(history.getMonth() > 0){
+                    HistoryOut historyOut = new HistoryOut();
+                    historyOut.setMonth(history.getMonth());
+                    for(Distributor distributor : history.getDistributors()){
+                        historyOut.getDistributorsIds().add(distributor.getId());
+                    }
+                    producerOut.getMonthlyStats().add(historyOut);
+                }
+            }
+            out.getProducers().add(producerOut);
         }
         return out;
     }

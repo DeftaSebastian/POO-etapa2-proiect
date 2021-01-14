@@ -6,5 +6,5 @@ import production.Producer;
 import java.util.List;
 
 public interface Observer {
-    public void update(int month);
+    public void update(List<Producer> producerList, int month);
 }

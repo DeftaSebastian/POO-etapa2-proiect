@@ -17,6 +17,7 @@ public class Producer implements Subject {
     private long numberOfDistributors = 0;
     private ArrayList<History> monthlyStats = new ArrayList<>();
     private ArrayList<Observer> observers = new ArrayList<>();
+    private ArrayList<Distributor> distributors = new ArrayList<>();
 
     public ArrayList<History> getMonthlyStats() {
         return monthlyStats;
@@ -87,17 +88,10 @@ public class Producer implements Subject {
         this.energyPerDistributor = energyPerDistributor;
     }
 
-    public void addAllObservers(List<Distributor> distributorList){
-        for(Distributor distributor : distributorList){
-            if(!distributor.isBankrupt()){
-                observers.add(distributor);
-            }
-        }
-    }
-
     @Override
     public void register(Observer newObserver) {
         observers.add(newObserver);
+        distributors.add((Distributor) newObserver);
     }
 
     @Override
@@ -106,9 +100,14 @@ public class Producer implements Subject {
     }
 
     @Override
-    public void notifyObserver() {
-        for(Observer observer : observers){
-            observer.update(monthlyStats.size());
+    public void notifyObserver(List<Producer> producerList) {
+        for (int i = 0; i < observers.size(); i++) {
+            observers.get(i).update(producerList, monthlyStats.size() - 1);
         }
     }
+
+    public ArrayList<Distributor> getDistributors() {
+        return distributors;
+    }
+
 }

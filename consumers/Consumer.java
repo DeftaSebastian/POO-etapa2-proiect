@@ -7,8 +7,8 @@ public final class Consumer {
     private boolean isBankrupt = false;
     private long remainedContractMonths;
     private long debt = 0;
-    private long debtTo;
-    private long contractTo;
+    private long debtTo = Integer.MAX_VALUE;
+    private long contractTo = Integer.MAX_VALUE;
 
     public long getDebt() {
         return debt;

@@ -105,7 +105,7 @@ class TestType {
 public final class Test {
     private static final String IN_FOLDER = "in/";
     private static final String REF_FOLDER = "ref/";
-    private static final String CHECKER_RESOURCES_FOLDER = "../checker/resources/";
+    private static final String CHECKER_RESOURCES_FOLDER = "checker/resources/";
     private static final File TEST_INPUTS_FILE = new File(CHECKER_RESOURCES_FOLDER + IN_FOLDER);
 
     private static final String OUT_FILE = "results.out";

@@ -5,14 +5,18 @@ import distributors.Distributor;
 import formulas.Formulas;
 import months.DistributorChanges;
 import months.ProducerChanges;
+import observerPattern.Observer;
+import production.History;
 import production.Producer;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public final class Actions {
     /**
      * functie care aduna venitul lunar al unui consumator cu bugetul acestuia
+     *
      * @param consumerList lista consumatorilor
      */
     public void giveSalary(final List<Consumer> consumerList) {
@@ -28,10 +32,11 @@ public final class Actions {
      * id-ul distribuitorului cu care consumatorul are contract in variabila contractTo si lunile
      * de durata a contractului in remainedContractMonths. Functia populeaza hashmap-ul
      * mapClientBills astfel in cat sa stim cat trebuie sa plateasca fiecare consumator pe luna
-     * @param consumerList lista de consumatori
-     * @param bestDistributor cel mai bun distribuitor
+     *
+     * @param consumerList      lista de consumatori
+     * @param bestDistributor   cel mai bun distribuitor
      * @param mapContractPrices hashmap-ul cu preturile contractelor a tuturor distribuitorilor
-     * @param mapClientBills hashmap-ul cu ratele pe care trebuie sa le plateasca consumatorii
+     * @param mapClientBills    hashmap-ul cu ratele pe care trebuie sa le plateasca consumatorii
      */
     public void makeContracts(final List<Consumer> consumerList,
                               final Distributor bestDistributor,
@@ -56,6 +61,7 @@ public final class Actions {
     /**
      * functie care calculeaza preturile stabilite de fiecare distribuitor si cauta distribuitorul
      * cu pretul cel mai mic
+     *
      * @param distributorList lista de distribuitori
      * @return intoarce cel mai bun distribuitor
      */
@@ -95,10 +101,11 @@ public final class Actions {
      * dobanda sau chiar il falimenteaza, functia mai calculeaza si cazul in care un consumator
      * nu se mai afla in lista de consumatori aflata in contractul unui distribuitor, dar acesta
      * are o dobanda la distribuitorul vechi.
-     * @param consumerList lista de consumatori
+     *
+     * @param consumerList    lista de consumatori
      * @param distributorList lista de distribuitori
-     * @param mapClientBills hashmap-ul ce contine sumele de bani pe care toti consumatorii trebuie
-     *                       sa le plateasca
+     * @param mapClientBills  hashmap-ul ce contine sumele de bani pe care toti consumatorii trebuie
+     *                        sa le plateasca
      * @return intoarce hashmap-ul cu sumele de bani pe care distribuitorii trebuie sa le primeasca
      */
     public HashMap<Long, Long> getMoneyFromConsumers(final List<Consumer> consumerList,
@@ -139,7 +146,8 @@ public final class Actions {
         Distributor distributorDebtTo = distributorList.get(0);
         Distributor distributorContractTo = distributorList.get(0);
         for (Consumer consumer : consumerList) {
-            if (consumer.getDebtTo() != 0 && consumer.getContractTo() != 0
+            if (consumer.getDebtTo() != Integer.MAX_VALUE &&
+                    consumer.getContractTo() != Integer.MAX_VALUE
                     && !consumer.isBankrupt()) {
                 if (consumer.getDebtTo() != consumer.getContractTo()) {
                     for (Distributor distributor : distributorList) {
@@ -155,13 +163,10 @@ public final class Actions {
                         }
                     }
                     if (consumer.getBudget()
-                            >= consumer.getDebt()
-                            + mapClientBills.get(consumer.getId())) {
+                            >= consumer.getDebt()) {
                         moneyBagDebtTo = moneyBagDebtTo + consumer.getDebt();
-                        moneyBagContractTo = moneyBagContractTo
-                                + mapClientBills.get(consumer.getId());
-                        moneyForDistributors
-                                .replace(distributorContractTo.getId(), moneyBagContractTo);
+                        consumer.setDebt(mapClientBills.get(consumer.getId()));
+                        consumer.setDebtTo(consumer.getContractTo());
                         moneyForDistributors.replace(distributorDebtTo.getId(), moneyBagDebtTo);
                         consumer.setBudget(consumer.getBudget() - consumer.getDebt()
                                 + mapClientBills.get(consumer.getId()));
@@ -175,10 +180,11 @@ public final class Actions {
     }
 
     /**
-     *functie care completeaza functia getMoneyFromConsumers, ea aducand sumele de bani pe care
+     * functie care completeaza functia getMoneyFromConsumers, ea aducand sumele de bani pe care
      * trebuie sa le primeasca distribuitorii de la clienti
+     *
      * @param moneyForDistributors hashMap cu banii care trebuie distribuitorii sa ii primeasca
-     * @param distributorList lista distribuitorilor
+     * @param distributorList      lista distribuitorilor
      */
     public void giveMoneyToDistributors(final HashMap<Long, Long> moneyForDistributors,
                                         final List<Distributor> distributorList) {
@@ -192,6 +198,7 @@ public final class Actions {
 
     /**
      * functie care calculeaza ce suma de bani trebuie sa plateasca un distribuitor pe luna
+     *
      * @param distributorList lista distribuitorilor
      */
     public void monthlyBillDistributors(final List<Distributor> distributorList) {
@@ -208,7 +215,8 @@ public final class Actions {
      * functie care verifica ce distribuitor au devenit falimentati, daca acestia sunt falimentati,
      * scoateam toti consumatorii din listele acestora si stergem datoriile pe care le pot avea
      * consumatorii la distribuitorul falimentat
-     * @param consumerList lista de consumatori
+     *
+     * @param consumerList    lista de consumatori
      * @param distributorList lista distribuitorilor
      */
     public void checkBankruptDistributors(final List<Consumer> consumerList,
@@ -236,6 +244,7 @@ public final class Actions {
 
     /**
      * functie care decrementeaza numarul de luni ramase din contracul consumatorilor
+     *
      * @param consumerList lista consumatorilor
      */
     public void decrementContractMonths(final List<Consumer> consumerList) {
@@ -247,7 +256,7 @@ public final class Actions {
     }
 
     public void monthlyDistributorChanges(final List<DistributorChanges> distributorChanges,
-                                   final List<Distributor> distributorList) {
+                                          final List<Distributor> distributorList) {
         for (DistributorChanges changes : distributorChanges) {
             for (Distributor distributor : distributorList) {
                 if (changes.getId() == distributor.getId()) {
@@ -259,10 +268,13 @@ public final class Actions {
 
     public void monthlyProducerChanges(final List<ProducerChanges> producerChanges,
                                        final List<Producer> producerList) {
-        for(ProducerChanges changes : producerChanges){
-            for(Producer producer : producerList){
-                if(changes.getId() == producer.getId()) {
-                    producer.setEnergyPerDistributor(changes.getEnergyPerDistributor());
+        for (ProducerChanges changes : producerChanges) {
+            for (int i = 0; i < producerList.size(); i++) {
+                if (producerList.get(i).getId() == changes.getId()) {
+                    producerList.get(i).setEnergyPerDistributor(changes.getEnergyPerDistributor());
+                    for (Distributor distributor : producerList.get(i).getDistributors()) {
+                        distributor.setHasToMove(true);
+                    }
                 }
             }
         }
@@ -270,7 +282,8 @@ public final class Actions {
 
     /**
      * functie care updateaza lunar lista tuturor consumatorilor
-     * @param consumerList lista tuturor consumatorilor
+     *
+     * @param consumerList    lista tuturor consumatorilor
      * @param newConsumerList lista de noi consumatori veniti
      */
     public void monthlyNewConsumers(final List<Consumer> consumerList,
@@ -282,8 +295,9 @@ public final class Actions {
      * functie care sterge un consumator din lista de contract a unui distribuitor, daca acesta
      * a terminat numarul de luni pe baza caruia a fost realizat contractul sau daca acesta a
      * falimentat
+     *
      * @param distributorList lista distribuitorilor
-     * @param consumerList lista consumatorilor
+     * @param consumerList    lista consumatorilor
      */
     public void endContract(final List<Distributor> distributorList,
                             final List<Consumer> consumerList) {
@@ -301,7 +315,8 @@ public final class Actions {
     /**
      * functie care populeaza hashMap-ul mapContractPrices cu preturile stabilite de distribuitori
      * la fiecare inceput de luna
-     * @param distributorList lista distribuitorilor
+     *
+     * @param distributorList   lista distribuitorilor
      * @param mapContractPrices hashMap-ul care trebuie populat
      */
     public void getContractPrices(final List<Distributor> distributorList,
@@ -334,8 +349,9 @@ public final class Actions {
     /**
      * functie care sterge un consumator din lista de contracte a unui distribuitor doar daca acesta
      * a falimentat
+     *
      * @param distributorList lista distribuitorilor
-     * @param consumerList lista consumatorilor
+     * @param consumerList    lista consumatorilor
      */
     public void endContractOnlyIfBankrupt(final List<Distributor> distributorList,
                                           final List<Consumer> consumerList) {
@@ -350,24 +366,74 @@ public final class Actions {
         }
     }
 
-    public void addDistributorsToProducers(List<Producer> producerList, Distributor distributor, int month,
+    public void addDistributorsToProducers(List<Producer> producerList, Distributor distributor,
+                                           int month,
                                            long totalEnergy) {
-        distributor.getEnergyFrom().clear();
-        for(Producer producer : producerList){
-            if(producer.getNumberOfDistributors() < producer.getMaxDistributors()
-                    && totalEnergy < distributor.getEnergyNeeded()){
+
+        for (Producer producer : producerList) {
+            if (producer.getNumberOfDistributors() < producer.getMaxDistributors()
+                    && totalEnergy < distributor.getEnergyNeeded()) {
                 totalEnergy += producer.getEnergyPerDistributor();
-                producer.setNumberOfDistributors(producer.getNumberOfDistributors() + 1);
                 distributor.getEnergyFrom().add(producer);
+                distributor.addSubject(producer);
+                distributor.addProducer(producer);
+                producer.register(distributor);
+                producer.setNumberOfDistributors(producer.getDistributors().size());
                 producer.getMonthlyStats().get(month).getDistributors().add(distributor);
             }
         }
     }
 
-    public void setProductionCostsDistributor(List<Distributor> distributorList){
+    public void findNewProducers(List<Producer> producerList, List<Distributor> distributorList) {
+        for (Distributor distributor : distributorList) {
+            if (distributor.hasToMove()) {
+                for (int i = distributor.getProducers().size() - 1; i >= 0; i--) {
+                    distributor.getEnergyFrom().clear();
+                    distributor.getProducers().get(i).getDistributors().remove(distributor);
+                    distributor.getProducers().get(i).unregister(distributor);
+                    distributor.getSubjects().remove(distributor.getProducers().get(i));
+                    distributor.getProducers().get(i).setNumberOfDistributors(
+                            distributor.getProducers().get(i).getDistributors().size() - 1);
+                    distributor.getProducers().remove(distributor.getProducers().get(i));
+                }
+                distributor.getStrategy().Strategy(producerList, distributor,
+                        producerList.get(0).getMonthlyStats().size() - 1);
+                distributor.setHasToMove(false);
+            } else if (!distributor.hasToMove()) {
+                for (Producer producer : distributor.getProducers()) {
+                    producer.getMonthlyStats().get(producer.getMonthlyStats().size() - 1)
+                            .getDistributors().add(distributor);
+                }
+            }
+        }
+    }
+
+    public void giveDistributorsNewProducers(List<Producer> producerList,
+                                             List<Distributor> distributorList) {
+        for (Distributor distributor : distributorList) {
+            distributor.getStrategy().Strategy(producerList, distributor,
+                    producerList.get(0).getMonthlyStats().size() - 1);
+        }
+    }
+
+    public void setProductionCostsDistributor(List<Distributor> distributorList) {
         Formulas formulas = new Formulas();
-        for(Distributor distributor : distributorList){
+        for (Distributor distributor : distributorList) {
             formulas.setProductionCost(distributor);
+        }
+    }
+
+    public void setStrategies(List<Distributor> distributorList) {
+        for (Distributor distributor : distributorList) {
+            distributor.setStrategy();
+        }
+    }
+
+    public void addNewHistory(List<Producer> producerList) {
+        for (Producer producer : producerList) {
+            producer.getMonthlyStats().add(new History());
+            producer.getMonthlyStats().get(producer.getMonthlyStats().size() - 1)
+                    .setMonth(producer.getMonthlyStats().size() - 1);
         }
     }
 }

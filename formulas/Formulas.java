@@ -17,8 +17,8 @@ public final class Formulas {
         return Math.round(Math.floor(0.2 * distributor.getProductionCost()));
     }
 
-    public long getCost(final Distributor distributor) {
-        long cost = 0;
+    public double getCost(final Distributor distributor) {
+        double cost = 0;
         for (Producer producer : distributor.getEnergyFrom()) {
             cost += producer.getEnergyPerDistributor() * producer.getPriceKW();
         }
@@ -43,6 +43,7 @@ public final class Formulas {
                 numberOfClients++;
             }
         }
+        setProductionCost(distributor);
         if (numberOfClients != 0) {
             return Math.round(Math
                     .floor(distributor.getInfrastructureCost() / numberOfClients)
@@ -60,6 +61,7 @@ public final class Formulas {
      * @return intoarcem suma calculata
      */
     public long getFinalContractNoClients(final Distributor distributor) {
+        setProductionCost(distributor);
         return distributor.getInfrastructureCost() + distributor.getProductionCost()
                 + getProfit(distributor);
     }
@@ -71,6 +73,7 @@ public final class Formulas {
      * @return intoarcem suma calculata
      */
     public long getMonthlyDistributorBill(final Distributor distributor) {
+        setProductionCost(distributor);
         return distributor.getInfrastructureCost()
                 + distributor.getProductionCost() * distributor.getContracts().size();
     }
