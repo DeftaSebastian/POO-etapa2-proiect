@@ -7,7 +7,7 @@ import production.Producer;
 
 import java.util.List;
 
-public class PriceStrategy implements Strategy{
+public final class PriceStrategy implements Strategy {
     @Override
     public void Strategy(List<Producer> producerList, Distributor distributor, int month) {
         long totalEnergy = 0;

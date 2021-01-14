@@ -4,7 +4,7 @@ import production.Producer;
 
 import java.util.Comparator;
 
-public class SortPriceThenQuantity implements Comparator<Producer> {
+public final class SortPriceThenQuantity implements Comparator<Producer> {
     @Override
     public int compare(Producer o1, Producer o2) {
         if (o1.getPriceKW() - o2.getPriceKW() == 0) {
@@ -14,10 +14,11 @@ public class SortPriceThenQuantity implements Comparator<Producer> {
                 return (int) o2.getEnergyPerDistributor() - (int) o1.getEnergyPerDistributor();
             }
         } else {
-            if(o1.getPriceKW() - o2.getPriceKW() < 0)
+            if (o1.getPriceKW() - o2.getPriceKW() < 0) {
                 return -1;
-            else
+            } else {
                 return 1;
+            }
         }
     }
 }

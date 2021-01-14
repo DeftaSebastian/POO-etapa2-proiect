@@ -1,6 +1,6 @@
 package months;
 
-public class DistributorChanges {
+public final class DistributorChanges {
     private long id;
     private long infraStructureCost;
 

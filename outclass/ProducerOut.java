@@ -1,16 +1,12 @@
 package outclass;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import entities.EnergyType;
-import production.History;
-import strategies.EnergyChoiceStrategyType;
 
 import java.util.ArrayList;
 
 @JsonPropertyOrder({"id", "maxDistributors", "priceKW", "energyType", "energyPerDistributor",
         "monthlyStats"})
-public class ProducerOut {
+public final class ProducerOut {
     private long id;
     private long maxDistributors;
     private double priceKW;

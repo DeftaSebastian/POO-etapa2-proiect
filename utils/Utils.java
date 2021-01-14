@@ -17,8 +17,8 @@ public class Utils {
         };
     }
 
-    public static EnergyType stringToEnergyType(final String energyType){
-        return switch (energyType){
+    public static EnergyType stringToEnergyType(final String energyType) {
+        return switch (energyType) {
             case "WIND" -> EnergyType.WIND;
             case "SOLAR" -> EnergyType.SOLAR;
             case "HYDRO" -> EnergyType.HYDRO;

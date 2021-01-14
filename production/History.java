@@ -4,7 +4,7 @@ import distributors.Distributor;
 
 import java.util.ArrayList;
 
-public class History {
+public final class History {
     private long month;
     private ArrayList<Distributor> distributors = new ArrayList<>();
 

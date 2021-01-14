@@ -2,13 +2,13 @@ package production;
 
 import distributors.Distributor;
 import entities.EnergyType;
-import observerPattern.Observer;
-import observerPattern.Subject;
+import observerpattern.Observer;
+import observerpattern.Subject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Producer implements Subject {
+public final class Producer implements Subject {
     private long id;
     private EnergyType energyType;
     private long maxDistributors;

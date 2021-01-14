@@ -2,7 +2,6 @@ package outclass;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import strategies.EnergyChoiceStrategyType;
 
 import java.util.ArrayList;
 import java.util.List;

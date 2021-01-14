@@ -3,20 +3,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import comparingtools.SortByID;
 import distributors.Distributor;
 import consumers.Consumer;
-import entities.EnergyType;
 import factory.Factory;
-import formulas.Formulas;
 import months.DistributorChanges;
 import months.MonthlyUpdates;
 import months.ProducerChanges;
-import net.sf.saxon.trans.SymbolicName;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import outclass.OutClass;
 import production.Producer;
-import strategies.EnergyChoiceStrategyType;
 import utils.Utils;
 
 import java.io.File;
@@ -27,6 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public final class Main {
+    private Main() {
+    }
+
     public static void main(final String[] args) throws Exception {
         JSONParser jsonParser = new JSONParser();
         List<Consumer> consumers = new ArrayList<>();

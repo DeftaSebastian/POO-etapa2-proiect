@@ -1,11 +1,10 @@
 package comparingtools;
 
-import com.sun.deploy.security.SelectableSecurityManager;
 import production.Producer;
 
 import java.util.Comparator;
 
-public class SortByGreenPriceQuantity implements Comparator<Producer> {
+public final class SortByGreenPriceQuantity implements Comparator<Producer> {
     @Override
     public int compare(Producer o1, Producer o2) {
         if (o1.getEnergyType().isRenewable() && o2.getEnergyType().isRenewable()) {

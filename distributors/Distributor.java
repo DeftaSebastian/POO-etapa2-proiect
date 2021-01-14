@@ -1,8 +1,8 @@
 package distributors;
 
 import consumers.Consumer;
-import observerPattern.Observer;
-import observerPattern.Subject;
+import observerpattern.Observer;
+import observerpattern.Subject;
 import production.Producer;
 import strategies.EnergyChoiceStrategyType;
 import strategies.GreenStrategy;

@@ -1,6 +1,6 @@
 package months;
 
-public class ProducerChanges {
+public final class ProducerChanges {
     private long id;
     private long energyPerDistributor;
 

@@ -5,12 +5,10 @@ import distributors.Distributor;
 import formulas.Formulas;
 import months.DistributorChanges;
 import months.ProducerChanges;
-import observerPattern.Observer;
 import production.History;
 import production.Producer;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public final class Actions {
@@ -146,8 +144,8 @@ public final class Actions {
         Distributor distributorDebtTo = distributorList.get(0);
         Distributor distributorContractTo = distributorList.get(0);
         for (Consumer consumer : consumerList) {
-            if (consumer.getDebtTo() != Integer.MAX_VALUE &&
-                    consumer.getContractTo() != Integer.MAX_VALUE
+            if (consumer.getDebtTo() != Integer.MAX_VALUE
+                    && consumer.getContractTo() != Integer.MAX_VALUE
                     && !consumer.isBankrupt()) {
                 if (consumer.getDebtTo() != consumer.getContractTo()) {
                     for (Distributor distributor : distributorList) {

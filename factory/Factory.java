@@ -79,11 +79,11 @@ public final class Factory {
                             producer.getPriceKW(),
                             producer.getEnergyType().toString(),
                             producer.getEnergyPerDistributor());
-            for(History history : producer.getMonthlyStats()){
-                if(history.getMonth() > 0){
+            for (History history : producer.getMonthlyStats()) {
+                if (history.getMonth() > 0) {
                     HistoryOut historyOut = new HistoryOut();
                     historyOut.setMonth(history.getMonth());
-                    for(Distributor distributor : history.getDistributors()){
+                    for (Distributor distributor : history.getDistributors()) {
                         historyOut.getDistributorsIds().add(distributor.getId());
                     }
                     producerOut.getMonthlyStats().add(historyOut);

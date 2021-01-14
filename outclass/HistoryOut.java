@@ -1,13 +1,11 @@
 package outclass;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.ArrayList;
-import java.util.ArrayList;
 
 @JsonPropertyOrder({"month", "distributorsIds"})
-public class HistoryOut {
+public final class HistoryOut {
     private long month;
     private ArrayList<Long> distributorsIds = new ArrayList<>();
 

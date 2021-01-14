@@ -4,9 +4,11 @@ import consumers.Consumer;
 import distributors.Distributor;
 import production.Producer;
 
-import java.util.List;
 
 public final class Formulas {
+    private double profitProduct = 0.2;
+    private double debtProduct = 1.2;
+
     /**
      * functie care calculeaza profitul unui distribuitor pe luna
      *
@@ -14,7 +16,7 @@ public final class Formulas {
      * @return intoarce suma calculata
      */
     public long getProfit(final Distributor distributor) {
-        return Math.round(Math.floor(0.2 * distributor.getProductionCost()));
+        return Math.round(Math.floor(profitProduct * distributor.getProductionCost()));
     }
 
     public double getCost(final Distributor distributor) {
@@ -86,6 +88,6 @@ public final class Formulas {
      * @return intoarcem suma calculata
      */
     public long getDebtAmount(final Long contractPrice) {
-        return Math.round(Math.floor(1.2 * contractPrice));
+        return Math.round(Math.floor(debtProduct * contractPrice));
     }
 }
