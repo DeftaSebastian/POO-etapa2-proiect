@@ -1,4 +1,4 @@
-package consumers;
+package inclasses;
 
 public final class Consumer {
     private long id;

@@ -1,8 +1,8 @@
 package formulas;
 
-import consumers.Consumer;
-import distributors.Distributor;
-import production.Producer;
+import inclasses.Consumer;
+import inclasses.Distributor;
+import inclasses.Producer;
 
 
 public final class Formulas {

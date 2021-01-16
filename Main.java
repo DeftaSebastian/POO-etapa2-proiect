@@ -1,8 +1,7 @@
 import actions.Actions;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import comparingtools.SortByID;
-import distributors.Distributor;
-import consumers.Consumer;
+import inclasses.Distributor;
+import inclasses.Consumer;
 import factory.Factory;
 import months.DistributorChanges;
 import months.MonthlyUpdates;
@@ -12,7 +11,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import outclass.OutClass;
-import production.Producer;
+import inclasses.Producer;
 import utils.Utils;
 
 import java.io.File;
@@ -112,10 +111,8 @@ public final class Main {
         Distributor bestDistributor;
 
         //Prima runda cu datele initiale
-        producers.sort(new SortByID()); //sortam crescator dupa id
         actions.addNewHistory(producers);
         actions.setStrategies(distributors);
-        //actions.giveDistributorsNewProducers(producers, distributors);
         actions.findNewProducers(producers, distributors);
         actions.setProductionCostsDistributor(distributors); //setam costul de productie
         bestDistributor = actions.getBestDistributor(distributors);

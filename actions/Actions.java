@@ -1,12 +1,12 @@
 package actions;
 
-import consumers.Consumer;
-import distributors.Distributor;
+import inclasses.Consumer;
+import inclasses.Distributor;
 import formulas.Formulas;
 import months.DistributorChanges;
 import months.ProducerChanges;
-import production.History;
-import production.Producer;
+import inclasses.History;
+import inclasses.Producer;
 
 import java.util.HashMap;
 import java.util.List;

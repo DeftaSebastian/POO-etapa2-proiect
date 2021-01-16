@@ -1,9 +1,7 @@
-package distributors;
+package inclasses;
 
-import consumers.Consumer;
 import observerpattern.Observer;
 import observerpattern.Subject;
-import production.Producer;
 import strategies.EnergyChoiceStrategyType;
 import strategies.GreenStrategy;
 import strategies.PriceStrategy;

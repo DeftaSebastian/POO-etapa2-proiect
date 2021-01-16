@@ -1,6 +1,4 @@
-package production;
-
-import distributors.Distributor;
+package inclasses;
 
 import java.util.ArrayList;
 

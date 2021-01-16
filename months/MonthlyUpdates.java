@@ -1,6 +1,6 @@
 package months;
 
-import consumers.Consumer;
+import inclasses.Consumer;
 
 import java.util.ArrayList;
 

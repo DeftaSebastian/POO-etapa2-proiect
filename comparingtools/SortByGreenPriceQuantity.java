@@ -1,6 +1,6 @@
 package comparingtools;
 
-import production.Producer;
+import inclasses.Producer;
 
 import java.util.Comparator;
 

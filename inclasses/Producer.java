@@ -1,6 +1,5 @@
-package production;
+package inclasses;
 
-import distributors.Distributor;
 import entities.EnergyType;
 import observerpattern.Observer;
 import observerpattern.Subject;

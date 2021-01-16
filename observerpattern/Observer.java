@@ -1,6 +1,6 @@
 package observerpattern;
 
-import production.Producer;
+import inclasses.Producer;
 
 import java.util.List;
 

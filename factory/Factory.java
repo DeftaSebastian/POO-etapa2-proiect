@@ -1,16 +1,16 @@
 package factory;
 
 import comparingtools.SortByID;
-import consumers.Consumer;
-import distributors.Distributor;
+import inclasses.Consumer;
+import inclasses.Distributor;
 import outclass.ConsumerForDistributor;
 import outclass.ConsumerOut;
 import outclass.DistribuitorOut;
 import outclass.HistoryOut;
 import outclass.OutClass;
 import outclass.ProducerOut;
-import production.History;
-import production.Producer;
+import inclasses.History;
+import inclasses.Producer;
 
 import java.util.Collections;
 import java.util.HashMap;

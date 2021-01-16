@@ -2,8 +2,8 @@ package strategies;
 
 import actions.Actions;
 import comparingtools.SortPriceThenQuantity;
-import distributors.Distributor;
-import production.Producer;
+import inclasses.Distributor;
+import inclasses.Producer;
 
 import java.util.List;
 
