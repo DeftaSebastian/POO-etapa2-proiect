@@ -253,6 +253,13 @@ public final class Actions {
         }
     }
 
+    /**
+     * functie care trece prin lista de schimbari lunare si cauta disitribuitorul caruia i se face
+     * schimbarea
+     *
+     * @param distributorChanges lista de schimbari lunare
+     * @param distributorList    lista de distruibuitori
+     */
     public void monthlyDistributorChanges(final List<DistributorChanges> distributorChanges,
                                           final List<Distributor> distributorList) {
         for (DistributorChanges changes : distributorChanges) {
@@ -264,6 +271,14 @@ public final class Actions {
         }
     }
 
+    /**
+     * functie care trece prin lista de schimbari lunare ale producatorilor si cauta producatorul
+     * caruia trebuie sa ii facem schimbarea, daca acesta a fost gasit, punem true la hasToMove
+     * de la toti distribuitorii acestuia
+     *
+     * @param producerChanges lista de schimbari lunare
+     * @param producerList    lista de producatori
+     */
     public void monthlyProducerChanges(final List<ProducerChanges> producerChanges,
                                        final List<Producer> producerList) {
         for (ProducerChanges changes : producerChanges) {
@@ -364,10 +379,17 @@ public final class Actions {
         }
     }
 
+    /**
+     * functie care primeste o lista ordonata de producatori, in ordinea specificata de strategia
+     * distribuitorului, si asigneaza producatorii ca surse de energie pentru distribuitor
+     *
+     * @param producerList lista ordonata de producatori
+     * @param distributor  distribuitorul pentru care trebuie sa cautam producatori
+     * @param month        luna in care se intampla aceasta cautare
+     */
     public void addDistributorsToProducers(List<Producer> producerList, Distributor distributor,
-                                           int month,
-                                           long totalEnergy) {
-
+                                           int month) {
+        long totalEnergy = 0;
         for (Producer producer : producerList) {
             if (producer.getNumberOfDistributors() < producer.getMaxDistributors()
                     && totalEnergy < distributor.getEnergyNeeded()) {
@@ -382,9 +404,17 @@ public final class Actions {
         }
     }
 
+    /**
+     * functie care trece prin toti distribuitorii adusi ca parametru si verifica daca acestia
+     * trebuie sa fie mutati sau nu la un nou producator
+     *
+     * @param producerList    lista producatorilor din care distribuitorii trebuie sa aleaga in
+     *                        cazul in care au nevoie de unul nou
+     * @param distributorList lista de distribuitori
+     */
     public void findNewProducers(List<Producer> producerList, List<Distributor> distributorList) {
         for (Distributor distributor : distributorList) {
-            if (distributor.hasToMove()) {
+            if (distributor.getHasToMove()) {
                 for (int i = distributor.getProducers().size() - 1; i >= 0; i--) {
                     distributor.getEnergyFrom().clear();
                     distributor.getProducers().get(i).getDistributors().remove(distributor);
@@ -394,26 +424,29 @@ public final class Actions {
                             distributor.getProducers().get(i).getDistributors().size() - 1);
                     distributor.getProducers().remove(distributor.getProducers().get(i));
                 }
-                distributor.getStrategy().Strategy(producerList, distributor,
+                distributor.getStrategy().method(producerList, distributor,
                         producerList.get(0).getMonthlyStats().size() - 1);
                 distributor.setHasToMove(false);
-            } else if (!distributor.hasToMove()) {
+            } else if (!distributor.getHasToMove()) {
                 for (Producer producer : distributor.getProducers()) {
                     producer.getMonthlyStats().get(producer.getMonthlyStats().size() - 1)
                             .getDistributors().add(distributor);
                 }
             }
         }
-    }
-
-    public void giveDistributorsNewProducers(List<Producer> producerList,
-                                             List<Distributor> distributorList) {
-        for (Distributor distributor : distributorList) {
-            distributor.getStrategy().Strategy(producerList, distributor,
-                    producerList.get(0).getMonthlyStats().size() - 1);
+        if (producerList.get(0).getMonthlyStats().size() - 1 == 0) {
+            for (Distributor distributor : distributorList) {
+                distributor.getStrategy().method(producerList, distributor,
+                        producerList.get(0).getMonthlyStats().size() - 1);
+            }
         }
     }
 
+    /**
+     * functie care seteaza costurile de productie la toti distribuitorii primiti ca parametru
+     *
+     * @param distributorList lista de distribuitori
+     */
     public void setProductionCostsDistributor(List<Distributor> distributorList) {
         Formulas formulas = new Formulas();
         for (Distributor distributor : distributorList) {
@@ -421,12 +454,22 @@ public final class Actions {
         }
     }
 
+    /**
+     * functie care seteaza strategiile distribuitorilor primiti ca parametru
+     *
+     * @param distributorList lista de distribuitori
+     */
     public void setStrategies(List<Distributor> distributorList) {
         for (Distributor distributor : distributorList) {
             distributor.setStrategy();
         }
     }
 
+    /**
+     * functie care adauga inca o luna in istoricul producatorilor primiti ca parametru
+     *
+     * @param producerList lista de producatori
+     */
     public void addNewHistory(List<Producer> producerList) {
         for (Producer producer : producerList) {
             producer.getMonthlyStats().add(new History());

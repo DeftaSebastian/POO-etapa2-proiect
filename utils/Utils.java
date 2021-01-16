@@ -3,11 +3,16 @@ package utils;
 import entities.EnergyType;
 import strategies.EnergyChoiceStrategyType;
 
-public class Utils {
+public final class Utils {
 
     private Utils() {
     }
 
+    /**
+     * functie care intoarce o constanta in functie de string-ul dat ca parametru
+     * @param strategyType string-ul dat ca parametru
+     * @return constanta gasita
+     */
     public static EnergyChoiceStrategyType stringToEnergyStrategy(final String strategyType) {
         return switch (strategyType) {
             case "GREEN" -> EnergyChoiceStrategyType.GREEN;
@@ -17,6 +22,11 @@ public class Utils {
         };
     }
 
+    /**
+     * functie care intoarce o constanta in functie de string-ul primit ca parametru
+     * @param energyType string primit ca parametru
+     * @return intoarce constanta gasita
+     */
     public static EnergyType stringToEnergyType(final String energyType) {
         return switch (energyType) {
             case "WIND" -> EnergyType.WIND;

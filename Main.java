@@ -115,7 +115,8 @@ public final class Main {
         producers.sort(new SortByID()); //sortam crescator dupa id
         actions.addNewHistory(producers);
         actions.setStrategies(distributors);
-        actions.giveDistributorsNewProducers(producers, distributors);
+        //actions.giveDistributorsNewProducers(producers, distributors);
+        actions.findNewProducers(producers, distributors);
         actions.setProductionCostsDistributor(distributors); //setam costul de productie
         bestDistributor = actions.getBestDistributor(distributors);
         actions.getContractPrices(distributors, mapContractPrices);

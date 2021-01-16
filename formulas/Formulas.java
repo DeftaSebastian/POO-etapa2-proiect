@@ -6,8 +6,9 @@ import production.Producer;
 
 
 public final class Formulas {
-    private double profitProduct = 0.2;
-    private double debtProduct = 1.2;
+    private final double profitProduct = 0.2;
+    private final double debtProduct = 1.2;
+    private final double productionCostDivide = 10;
 
     /**
      * functie care calculeaza profitul unui distribuitor pe luna
@@ -19,6 +20,12 @@ public final class Formulas {
         return Math.round(Math.floor(profitProduct * distributor.getProductionCost()));
     }
 
+    /**
+     * functie care calculeaza costul unui distribuitor
+     *
+     * @param distributor distribuitorul primit ca parametru
+     * @return intoarce costul calculat
+     */
     public double getCost(final Distributor distributor) {
         double cost = 0;
         for (Producer producer : distributor.getEnergyFrom()) {
@@ -27,8 +34,14 @@ public final class Formulas {
         return cost;
     }
 
+    /**
+     * functie care calculeaza si seteaza costul de productie al unui distribuitor
+     *
+     * @param distributor distribuitorul pentru care trebuie sa calculam costul de productie
+     */
     public void setProductionCost(final Distributor distributor) {
-        distributor.setProductionCost(Math.round(Math.floor(getCost(distributor) / 10)));
+        distributor.setProductionCost(
+                Math.round(Math.floor(getCost(distributor) / productionCostDivide)));
     }
 
     /**

@@ -36,6 +36,10 @@ public final class Distributor implements Observer {
         this.subjects = subjects;
     }
 
+    /**
+     * functie care adauga un subiect la lista de subiecte a distribuitorului
+     * @param newSubject subiectul care trebuie adaugat
+     */
     public void addSubject(Subject newSubject) {
         subjects.add(newSubject);
     }
@@ -54,6 +58,10 @@ public final class Distributor implements Observer {
         return producers;
     }
 
+    /**
+     * functie care aduauga un producator la lista de producatori a distribuitorului
+     * @param producer producatorul care trebuie adaugat
+     */
     public void addProducer(Producer producer) {
         producers.add(producer);
     }
@@ -169,19 +177,22 @@ public final class Distributor implements Observer {
         this.contracts = contracts;
     }
 
+    /**
+     * functie care seteaza strategia unui distributor
+     */
     public void setStrategy() {
-        if (energyChoiceStrategyType.label.equals("GREEN")) {
+        if (energyChoiceStrategyType.getLabel().equals("GREEN")) {
             strategy = new GreenStrategy();
         }
-        if (energyChoiceStrategyType.label.equals("PRICE")) {
+        if (energyChoiceStrategyType.getLabel().equals("PRICE")) {
             strategy = new PriceStrategy();
         }
-        if (energyChoiceStrategyType.label.equals("QUANTITY")) {
+        if (energyChoiceStrategyType.getLabel().equals("QUANTITY")) {
             strategy = new QuantityStrategy();
         }
     }
 
-    public boolean hasToMove() {
+    public boolean getHasToMove() {
         return hasToMove;
     }
 
